@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePostParams, UpdatePostParams } from 'src/utils/types';
-import { Post, User } from 'src/entities';
+import { Post, User } from '../entities';
 
 @ApiTags("User")
 @Injectable()
@@ -25,7 +25,7 @@ export class UserService {
         try {
             const user = await this.userRepository.findOneBy({id : data.userId})
             if(!user) throw new BadRequestException()
-            
+
             const post = await this.postRepository.create({body : data.body,title : data.title,user} )
             
             this.postRepository.save(post)
@@ -48,7 +48,6 @@ export class UserService {
                 }
             })
             if(!post) throw new NotFoundException({"message" :"Post doesnt exist"})
-
             if(post.user.id !== id) throw new UnauthorizedException()
             
             post.body = data.body || post.body  

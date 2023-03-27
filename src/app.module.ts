@@ -6,19 +6,28 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { PaymentModule } from './payment/payment.module';
-import config from './configs/typeorm';
-
+import entities from './entities';
 
 @Module({
   imports: [
     AuthModule, 
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot(config),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.SERVER_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: entities,
+      synchronize: true,
+      migrations: [
+          'dist/src/db/*.js'
+      ],
+    }),
     PostModule,
     AuthModule,
     UserModule,
-    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

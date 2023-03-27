@@ -82,7 +82,7 @@ export class AuthService {
                 id: user.id,
             }, { secret: process.env.RESET_PASSWORD_TOKEN_SECRET })
             
-            return { "message": "its supposed to send this link ", "link": `${process.env.SERVER_HOST}/user/reset-password/${token}`}
+            return { "message": "its supposed to send this link ", "link": `${process.env.SERVER_URL}/user/reset-password/${token}`}
         } catch (error) {
             throw error
         }
